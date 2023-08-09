@@ -1,0 +1,12 @@
+resource_group_name = "AZP-112-RG"
+vnetname = "AZP-VNET-112"
+subnetname = "subnet-westeurope"
+nsgname = "AZP-112-NSG"
+nic-name = "matlab2"
+ipname  =  "windowsipnew"
+vmname =  "samplewin1"#max15 letters
+vmusername = "testuser"
+imgsize = "Standard_D4s_v3"
+osversion = "rs5-enterprise-standard"#sku
+publisher = "MicrosoftWindowsDesktop"
+offer  = "Windows-10"

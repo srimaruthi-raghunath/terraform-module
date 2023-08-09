@@ -1,0 +1,140 @@
+trigger:
+  - none 
+
+
+pool:
+  vmImage: ubuntu-latest
+# strategy:
+#   matrix:
+#     Python38
+#       python.version: "3.8"
+variables:
+- name: hello
+  value: santhosh1
+
+- ${{if eq(variables['Build.Reason'],'PullRequest')}}:
+  - name: pullrequest
+    value: true 
+  # ${{if ne(variables['Build.Reason'],'PullRequest')}}:
+  # value: 'no'
+
+stages:
+
+
+- stage: stage1
+  displayName: stage1
+  jobs:
+  - job: Set_Pipeline_Parameters
+    steps:
+      - task: Bash@3
+        inputs:
+          targetType: inline
+          script: |
+                echo "this is with pull request"
+                if [[ ${variables.pullrequest} == true ]]
+                then 
+                  echo "i am good"
+                fi
+                echo " no pull request comes "
+               
+                  
+- ${{ if and(ne(variables.pullrequest,'true'),eq(variables.hello,'santhosh1')) }}:
+
+  - stage: stage2
+    displayName: stage2
+    jobs:
+      - job: Setup_Python_environment
+        steps: 
+        - task: Bash@3
+          inputs:
+            targetType: inline
+            script: |
+              echo "this is not with pull request "
+
+
+- stage: hello
+  displayName: hello
+  condition:  and(succeeded(), ne(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  jobs:
+      - job: hello
+        steps: 
+        - task: Bash@3
+          inputs:
+            targetType: inline
+            script: |
+              echo "normal one "
+    
+    
+
+# steps:
+#    - task: Bash@3
+#      inputs:
+#         targetType: inline
+#         script: |
+#                pip install version-query --cache-dir /opt/app-root/cache/pip
+#                echo "read the branch name"
+#                Branch_name=${BUILD_SOURCEBRANCH}
+#                echo $Branch_name
+#                BRANCH_NAME=`echo $Branch_name | cut -d '/' -f 3`
+#                echo "the name of the output from the above variable is $BRANCH_NAME"
+              
+#                 VERSION=`python -m version_query -p .`
+#                 echo $VERSION
+#                 clean_tag=`echo $VERSION |  sed -n '/[0-9]\+\.[0-9]\+\.[0-9]\+\.dev*/p'`
+#                 echo $clean_tag              
+
+# - ${{if ne(variables.pullrequest,'true')}}:
+#- ${{if ne(variables.Build.SourceBranchName, 'refs/heads/develop')}}:
+               
+#                     # Branch_name=`echo ${BUILD_SOURCEBRANCH}|| cut -d '/' -f 3`
+#                     # echo $Branch_name
+#               # pip install version-query --cache-dir /opt/app-root/cache/pip
+#               # echo "Building Pull Request ${BUILD_SOURCEBRANCH}"
+#               # ver=${BUILD_SOURCEBRANCH}
+#               # echo ${ver}
+#               # new=`echo $ver | cut -d '/' -f 3`
+#               # echo $new
+#                    # if [[ -z $BRANCH_NAME ]]
+#                   # then
+#                   # echo "branch exist"
+#                   # else
+#                   # echo "brnach not exist"
+#                   # fi
+
+#               # if [[  $new == 'master' ]]
+#               # then
+#               #   echo "branch "
+#               # fi
+           
+#               # echo "Building Pull Request ${BUILD_SOURCEBRANCH}"
+#               # ver=${BUILD_SOURCEBRANCH}
+#               # echo ${ver}
+#               # new=`echo $ver | cut -d '/' -f 3`
+#               # echo $new
+
+#               # VERSION=`python -m version_query -p .`
+#               # echo $VERSION
+#               # DEPLOY=0
+#               # clean_tag=`echo $VERSION| grep dev`
+#               # echo $clean_tag
+#               # if [[ $BUILD_SOURCEBRANCH == 'refs/heads/master' ]];
+#               #   then
+#               #   VERSION=`python -m version_query -p .`
+#               #   DEPLOY=0
+#               #   clean_tag=`echo $VERSION| grep dev`
+#               #           if [[ $clean_tag != null ]];
+#               #           then
+#               #             echo "the value is $clean_tag"
+#               #           else
+#               #             echo "the value is not exist"
+#               #           fi
+#               #   fi
+# - ${{if or(eq(variables['pullrequest'],true),eq(variables.hello,'santhosh1223')) }}:
+             
+
+           
+      
+            
+
+           
+            

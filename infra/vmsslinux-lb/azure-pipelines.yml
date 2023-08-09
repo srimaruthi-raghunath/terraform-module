@@ -1,0 +1,35 @@
+trigger:
+ paths:
+    include:
+    - infra/vmsslinux-lb/*
+pool:
+  name: AZO-SW4ZF-TF
+
+steps:
+- task: TerraformTaskV3@3
+  name: init
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/vmsslinux-lb'
+    backendServiceArm: 'AZP-001-RG-SC'
+    backendAzureRmResourceGroupName: 'AZP-001-RG'
+    backendAzureRmStorageAccountName: 'azp001toolsdevopssa'
+    backendAzureRmContainerName: 'tfstatevmss001'
+    backendAzureRmKey: 'terraformlinuxcustom.tfstate'
+    
+- task: TerraformTaskV3@3
+  name: plan
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/infra/vmsslinux-lb'
+    environmentServiceNameAzureRM: 'AZP-001-RG-SC'
+- ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+  - task: TerraformTaskV3@3
+    name: teraform_apply
+    inputs:   
+      provider: 'azurerm'
+      command: 'apply'
+      commandOptions: '--auto-approve'
+      environmentServiceNameAzureRM: 'AZP-112-RG_SC'

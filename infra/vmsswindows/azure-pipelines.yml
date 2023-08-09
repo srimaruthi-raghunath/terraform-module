@@ -1,0 +1,51 @@
+trigger:
+  branches:
+     include:
+       - main
+  paths:
+     include:
+       - infra/vmsswindows/terraform.tfvars
+pool:
+  name: AZP-112_Dafora
+
+variables:
+ - group: terraform-support
+steps:
+- task: Bash@3
+  displayName: "init"
+  inputs:
+     targetType: inline
+     script: |
+        terraform init
+     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/vmsswindows'
+  env:
+   ARM_CLIENT_ID: $(client-id)
+   ARM_CLIENT_SECRET: $(client-secret)
+   ARM_SUBSCRIPTION_ID: $(subscription-id)
+   ARM_TENANT_ID: $(tenant-id)
+
+- task: Bash@3
+  displayName: "plan"
+  inputs:
+     targetType: inline
+     script: |
+        terraform plan -out=tfdeploy -input=false 
+     workingDirectory: '$(System.DefaultWorkingDirectory)/infra/vmsswindows'
+  env:
+   ARM_CLIENT_ID: $(client-id)
+   ARM_CLIENT_SECRET: $(client-secret)
+   ARM_SUBSCRIPTION_ID: $(subscription-id)
+   ARM_TENANT_ID: $(tenant-id)
+  
+- task: Bash@3
+  displayName: apply
+  inputs:
+        targetType: inline
+        script: |
+            terraform apply "tfdeploy"
+        workingDirectory: '$(System.DefaultWorkingDirectory)/infra/vmsswindows'
+  env:
+        ARM_CLIENT_ID: $(client-id)
+        ARM_CLIENT_SECRET: $(client-secret)
+        ARM_SUBSCRIPTION_ID: $(subscription-id)
+        ARM_TENANT_ID: $(tenant-id)
