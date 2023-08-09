@@ -1,0 +1,5 @@
+No empty lines at top of file.
+Empty lines between the blocks.
+No trailing spaces.
+A empty line at EOF (missing in some files).
+Same indention.

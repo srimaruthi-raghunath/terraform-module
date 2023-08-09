@@ -1,0 +1,23 @@
+module "vmss" {
+  source                              = "git::https://SW4ZF@dev.azure.com/SW4ZF/AZP-001_SW4ZF_ToolsDevOps/_git/terraform-modules//modules/azure/vmss-linux?ref=main"
+  resource_group_name                 = "AZP-112-DAFORA-RG"
+  vnetname                            = "AZO-VNET-001"
+  subnetname                          = "subnet-westeurope"
+  nsgname                             = "AZP-112-DAFORA-NSG"
+  nic-name                            = "AZP-112-DAFORA-VMSS-01-NIC"
+  ipname                              = "AZP-112-DAFORA-VMSS-01-IP"
+  keyvault_name                       = "AZP-112-DAFORA-KV"
+  keyvault_resource_group_name        = "AZP-112-DAFORA-RG"
+  keyvault_admin_password_secret_name = "admin-password"
+  custom_image                        = "vm-4-vmss-clean-image-20230118"
+  customimage_resource_group          = "AZP-112-DAFORA-RG"
+  proximity_group_name                = "AZP-112-DAFORA-VMSS-PPG"
+  vmss_name                           = "AZP-112-DAFORA-VMSS-01"
+  computer_prefix                     = "AZP-112-DAFORA-VMSS-VM"
+  admin_username                      = "admin-username"
+  os_storage_account_type             = "Standard_LRS"
+  sku                                 = "Standard_B1s"
+  extra_disk                          = 20
+  overprovision                       = false
+  instances                           = 3
+}

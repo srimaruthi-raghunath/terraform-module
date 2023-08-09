@@ -1,0 +1,5 @@
+resource_group_name         = ""
+keyvault_name               = ""
+sku_name                    = ""
+secret_permissions_spn      = ""
+certificate_permissions_spn = ""
